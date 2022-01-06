@@ -15,7 +15,7 @@ module.exports.userInfo = async (req, res) => {
     }).select("-password")
 }
 
-//TODO Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client (1:24:56)
+//TODO Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
 module.exports.updateUser = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send("ID unknown : " + req.params.id);
@@ -50,3 +50,66 @@ module.exports.deleteUser = async (req, res) => {
         return res.status(500).json({ message: err });
     }
 };
+
+//TODO Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+module.exports.follow = async (req, res) => {
+    if (!ObjectID.isValid(req.params.id))
+        return res.status(400).send("ID unknown : " + req.params.id);
+    if (!ObjectID.isValid(req.body.idToFollow))
+        return res.status(400).send("ID unknown : " + req.body.idToFollow);
+
+    try {
+        //add to the follower list
+        await UserModel.findById(
+            req.params.id,
+            { $addToSet:{ following: req.body.idToFollow}},
+        { new: true, upert: true},
+        (err, docs) => {
+                if (!err) res.status(201).json(docs);
+                else return res.status(400).json(err)
+        }
+        );
+        //add to following list
+        await UserModel.findById(
+            req.body.idToFollow,
+            { $addToSet: { followers: req.params.id}},
+            { new: true, upert: true},
+            (err, docs) => {
+                if (err) return res.status(400).json(err)
+            }
+        )
+    } catch (err) {
+        return res.status(500).json({ message: err });
+    }
+}
+
+module.exports.unfollow = async (req, res) => {
+    if (!ObjectID.isValid(req.params.id))
+        return res.status(400).send("ID unknown : " + req.params.id);
+    if (!ObjectID.isValid(req.body.idToFollow))
+        return res.status(400).send("ID unknown : " + req.body.idToUnfollow);
+
+    try {
+        //add to the follower list
+        await UserModel.findById(
+            req.params.id,
+            { $pull:{ following: req.body.idToUnfollow}},
+            { new: true, upsert: true},
+            (err, docs) => {
+                if (!err) res.status(201).json(docs);
+                else return res.status(400).json(err)
+            }
+        );
+        //add to following list
+        await UserModel.findById(
+            req.body.idToUnfollow,
+            { $pull: { followers: req.params.id}},
+            { new: true, upsert: true},
+            (err, docs) => {
+                if (err) return res.status(400).json(err)
+            }
+        )
+    } catch (err) {
+        return res.status(500).json({ message: err });
+    }
+}
