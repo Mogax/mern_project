@@ -15,25 +15,21 @@ module.exports.userInfo = async (req, res) => {
     }).select("-password")
 }
 
-//TODO Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
 module.exports.updateUser = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send("ID unknown : " + req.params.id);
 
     try {
-        await UserModel.findOneAndUpdate(
+        const docs = await UserModel.findOneAndUpdate(
             { _id: req.params.id },
             {
                 $set: {
                     bio: req.body.bio,
                 },
             },
-            { new: true, upsert: true, setDefaultsOnInsert: true },
-            (err, docs) => {
-                if (!err) return res.send(docs);
-                else return res.status(500).send({ message: err });
-            }
+            { new: true, upsert: true, setDefaultsOnInsert: true }
         );
+        return res.send(docs);
     } catch (err) {
         return res.status(500).json({ message: err });
     }
@@ -51,8 +47,8 @@ module.exports.deleteUser = async (req, res) => {
     }
 };
 
-//TODO Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
 module.exports.follow = async (req, res) => {
+
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send("ID unknown : " + req.params.id);
     if (!ObjectID.isValid(req.body.idToFollow))
@@ -60,25 +56,20 @@ module.exports.follow = async (req, res) => {
 
     try {
         //add to the follower list
-        await UserModel.findById(
+        const docs = await UserModel.findByIdAndUpdate(
             req.params.id,
             { $addToSet:{ following: req.body.idToFollow}},
-        { new: true, upert: true},
-        (err, docs) => {
-                if (!err) res.status(201).json(docs);
-                else return res.status(400).json(err)
-        }
+        { new: true, upsert: true}
         );
         //add to following list
-        await UserModel.findById(
+        await UserModel.findByIdAndUpdate(
             req.body.idToFollow,
             { $addToSet: { followers: req.params.id}},
-            { new: true, upert: true},
-            (err, docs) => {
-                if (err) return res.status(400).json(err)
-            }
+            { new: true, upsert: true}
         )
+        return res.send(docs);
     } catch (err) {
+        console.log(err)
         return res.status(500).json({ message: err });
     }
 }

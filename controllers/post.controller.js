@@ -55,7 +55,6 @@ module.exports.deletePost = (req, res) => {
     )
 };
 
-//TODO Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
 module.exports.likePost = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send("ID unknown : " + req.params.id);
@@ -66,24 +65,17 @@ module.exports.likePost = async (req, res) => {
             {
                 $addToSet : { likers: req.body.id}
             },
-            {new: true},
-            (err, docs) => {
-                if (err) return res.status(400).send(err);
-            }
-        ).clone();
-        await UserModel.findByIdAndUpdate(
+            {new: true}
+        );
+        const docs = await UserModel.findByIdAndUpdate(
             req.body.id,
             {
                 $addToSet: { likes: req.params.id }
             },
-            {new: true},
-            (err, docs) => {
-                if (!err) res.send(docs);
-                else return res.status(400).send(err);
-            }
+            {new: true}
         )
+        return res.send(docs)
     } catch(err){
-        console.log(err)
         return res.status(400).send(err);
     }
 }
