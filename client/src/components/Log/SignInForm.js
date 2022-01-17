@@ -6,7 +6,32 @@ const SignInForm = () => {
     const [password, setPassword] = useState();
 
     const handleLogin = (e) =>{
+        e.preventDefault();
+        const emailError = document.querySelector('.email.error');
+        const passwordError = document.querySelector('.password.error');
 
+        axios({
+            method: 'post',
+            url: `${process.env.REACT_APP_API_URL}api/user/login`,
+            withCredentials: true,
+            data: {
+                email,
+                password,
+            },
+        })
+            .then((res)=>{
+                console.log(res)
+                if (res.data.errors.email) {
+                    emailError.innerHTML = res.data.errors.email;
+                } else if(res.data.password) {
+                    passwordError.innerHTML = res.data.errors.password;
+                } else{
+                    window.location = '/';
+                }
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
     }
 
     return (
@@ -19,6 +44,8 @@ const SignInForm = () => {
             <label htmlFor="password">Password</label>
             <br/>
             <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} value={password}/>
+            <div className="email error"/>
+            <br/>
             <input type="submit"/>
         </form>
     );

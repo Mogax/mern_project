@@ -61,12 +61,11 @@ userSchema.statics.login = async function(email, password) {
         const auth = await bcrypt.compare(password, user.password);
         if (auth) {
             return user;
-        } else {
-            throw Error('incorrect password');
         }
-        throw Error('incorrect email')
+        throw Error('incorrect password');
     }
-}
+    throw Error('incorrect email')
+};
 
 const UserModel = mongoose.model('user', userSchema);
 
