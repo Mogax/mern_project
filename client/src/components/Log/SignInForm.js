@@ -21,15 +21,15 @@ const SignInForm = () => {
         })
             .then((res)=>{
                 console.log(res)
-                if (res.data.errors.email) {
+                if (res.data.errors) {
                     emailError.innerHTML = res.data.errors.email;
-                } else if(res.data.password) {
                     passwordError.innerHTML = res.data.errors.password;
                 } else{
                     window.location = '/';
                 }
             })
             .catch((err)=>{
+                console.log("Pass")
                 console.log(err)
             })
     }
@@ -44,7 +44,7 @@ const SignInForm = () => {
             <label htmlFor="password">Password</label>
             <br/>
             <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value)} value={password}/>
-            <div className="email error"/>
+            <div className="password error"/>
             <br/>
             <input type="submit"/>
         </form>
