@@ -30,13 +30,13 @@ export const uploadPicture = (data, id) => {
 export const updateBio = (userId, bio) => {
     return (dispatch) => {
         return axios({
-            methode: "put",
-            url: `${process.env.REACT_APP_API_URL}api/user/upload`,
-            data: { bio }
+            method: "put",
+            url: `${process.env.REACT_APP_API_URL}api/user/` + userId,
+            data: { bio },
         })
             .then((res) => {
-                dispatch({type: UPDATE_BIO, payload: bio})
+                dispatch({ type: UPDATE_BIO, payload: bio });
             })
             .catch((err) => console.log(err));
-    }
-}
+    };
+};
