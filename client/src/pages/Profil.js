@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import Log from '../components/Log';
 import { UidContext} from "../components/AppContext";
+import UpdateProfil from "../components/Profil/UpdateProfil";
 
 const Profil = () => {
     // noinspection JSCheckFunctionSignatures
@@ -9,7 +10,7 @@ const Profil = () => {
     return (
         <div className={"profil-page"}>
             {uid ? (
-                <h1>Update page</h1>
+                <UpdateProfil/>
             ) : (
                 <div className={"log-container"}>
                     <Log sign={true}/>

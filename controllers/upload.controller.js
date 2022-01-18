@@ -9,7 +9,7 @@ module.exports.uploadProfil = async (req, res) => {
         if (req.file.detectedMimeType !== 'image/jpg' && req.file.detectedMimeType !=='image/jpeg' && req.file.detectedMimeType !=='image/png'){
             throw Error("invalid file")
         }
-        if (req.file.size > 500000) throw Error("max size");
+        if (req.file.size > 5000000) throw Error("max size");
     } catch (err) {
         const errors = uploadErrors(err);
         return res.status(201).json({errors})
