@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import UploadImg from "./UploadImg";
 import {updateBio} from "../../actions/user.actions";
 import {dateParser} from "../../Utils/Utils";
+import FollowHandler from "./FollowHandler";
 
 const UpdateProfil = () => {
     const [bio, setBio] = useState('');
@@ -67,7 +68,9 @@ const UpdateProfil = () => {
                                             <li>
                                                 <img src={user.picture} alt="user-picture"/>
                                                 <h4>{user.pseudo}</h4>
-                                                <h1>Follow</h1>
+                                                <div className="follow-handler">
+                                                    <FollowHandler idToFollow={user._id}/>
+                                                </div>
                                             </li>
                                         )
                                     }
@@ -90,7 +93,9 @@ const UpdateProfil = () => {
                                             <li>
                                                 <img src={user.picture} alt="user-picture"/>
                                                 <h4>{user.pseudo}</h4>
-                                                <h1>Follow</h1>
+                                                <div className="follow-handler">
+                                                    <FollowHandler idToFollow={user._id}/>
+                                                </div>
                                             </li>
                                         )
                                     }

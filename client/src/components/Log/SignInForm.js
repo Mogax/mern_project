@@ -28,7 +28,6 @@ const SignInForm = () => {
                 }
             })
             .catch((err)=>{
-                console.log("Pass")
                 console.log(err)
             })
     }
