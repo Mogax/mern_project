@@ -7,11 +7,10 @@ import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 import {getUsers} from "./actions/users.actions";
-import {logger} from "redux-logger/src";
 import {composeWithDevTools} from "redux-devtools-extension";
 
 const store = createStore(
-    rootReducer, composeWithDevTools(applyMiddleware(thunk, logger))
+    rootReducer, composeWithDevTools(applyMiddleware(thunk))
 );
 
 store.dispatch(getUsers())
