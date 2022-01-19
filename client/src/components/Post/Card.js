@@ -74,7 +74,7 @@ const Card = ({post}) => {
                                 <div onClick={() => setIsUpdated(!isUpdated)}>
                                     <img src="./img/icons/edit.svg" alt=""/>
                                 </div>
-                                <DeleteCard/>
+                                <DeleteCard post={post}/>
                             </div>
                         )}
                         <div className="card-footer">

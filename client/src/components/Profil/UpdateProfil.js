@@ -9,13 +9,17 @@ import FollowHandler from "./FollowHandler";
 const UpdateProfil = () => {
     const [bio, setBio] = useState('');
     const [updateForm, setUpdateForm] = useState(false);
+    const [followingPopup, setFollowingPopup] = useState(false);
+    const [followersPopup, setFollowersPopup] = useState(false);
+
     // noinspection JSUnresolvedVariable
     const userData = useSelector((state) => state.userReducer)
     // noinspection JSUnresolvedVariable
     const usersData = useSelector((state) => state.usersReducer)
+    // noinspection JSUnresolvedVariable
+    const error = useSelector((state) => state.errorReducer.userError)
     const dispatch = useDispatch();
-    const [followingPopup, setFollowingPopup] = useState(false);
-    const [followersPopup, setFollowersPopup] = useState(false);
+
 
     const handleUpdate = (e) => {
         dispatch(updateBio(userData._id, bio));
@@ -25,14 +29,14 @@ const UpdateProfil = () => {
     return (
         <div className="profile-container">
             <LeftNav />
-            <h1>Profil {userData.pseudo!==undefined?("aeiouyh").includes(userData.pseudo[0].toLowerCase()) ? 'd\'':'de ':"" } {userData.pseudo}</h1> {/*TODO change De en d' si voyelle*/}
+            <h1>Profil {userData.pseudo!==undefined?("aeiouyh").includes(userData.pseudo[0].toLowerCase()) ? 'd\'':'de ':"" } {userData.pseudo}</h1>
             <div className="update-container">
                 <div className="left-part">
                     <h3>Photo de profil</h3>
                     <img src={userData.picture} alt="photo de profil"/>
                     <UploadImg/>
-                    {/*<p>{errors.maxSize}</p>*/}
-                    {/*<p>{errors.format}</p>*/}
+                    <p>{error.maxSize}</p>
+                    <p>{error.format}</p>
                 </div>
                 <div className="right-part">
                     <div className="bio-update">

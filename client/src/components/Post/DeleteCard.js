@@ -2,11 +2,11 @@ import React from 'react';
 import {useDispatch} from "react-redux";
 import {deletePost} from "../../actions/post.actions";
 
-const DeleteCard = (props) => {
+const DeleteCard = ({post}) => {
     const dispatch = useDispatch()
 
     const deleteQuote = () => {
-        dispatch(deletePost(props._id))
+        dispatch(deletePost(post._id))
     }
 
     return (
