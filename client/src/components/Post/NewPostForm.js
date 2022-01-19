@@ -40,19 +40,6 @@ const NewPostForm = () => {
         setVideo('')
     }
 
-    const handleVideo = () => {
-        let findLink = message.split(" ");
-        findLink.forEach(word => {
-            if (word.includes("https://www.youtube")){
-                let embed = word.replaceAll("watch?v=", 'embed/')
-                setVideo(embed.split("&")[0])
-                if (findLink.indexOf(word) !== -1) findLink.splice(findLink.indexOf(word), 1)
-                setMessage(findLink.join(" "))
-                setPostPicture('')
-            }
-        })
-    }
-
     const cancelPost = () => {
         setMessage('');
         setPostPicture('');
@@ -61,6 +48,19 @@ const NewPostForm = () => {
     }
 
     useEffect(() => {
+        const handleVideo = () => {
+            let findLink = message.split(" ");
+            findLink.forEach(word => {
+                if (word.includes("https://www.youtube")){
+                    let embed = word.replaceAll("watch?v=", 'embed/')
+                    setVideo(embed.split("&")[0])
+                    if (findLink.indexOf(word) !== -1) findLink.splice(findLink.indexOf(word), 1)
+                    setMessage(findLink.join(" "))
+                    setPostPicture('')
+                }
+            })
+        }
+
         if(!isEmpty(userData)){
             setIsLoading(false)
         }
@@ -80,7 +80,7 @@ const NewPostForm = () => {
                     </div>
                     <NavLink exact to="/profil">
                         <div className="user-info">
-                            <img src={userData.picture} alt="user-picture"/>
+                            <img src={userData.picture} alt="user-pict"/>
                         </div>
                     </NavLink>
                     <div className="post-form">
@@ -88,7 +88,7 @@ const NewPostForm = () => {
                         {(message || postPicture || video.length>20) && (
                             <li className="card-container">
                                 <div className="card-left">
-                                    <img src={userData.picture} alt="user-picture"/>
+                                    <img src={userData.picture} alt="user-pict"/>
                                 </div>
                                 <div className="card-right">
                                     <div className="card-header">
@@ -100,7 +100,7 @@ const NewPostForm = () => {
                                     <div className="content">
                                         <p>{message}</p>
                                         {postPicture && (
-                                            <img src={postPicture} alt="post-picture"/>
+                                            <img src={postPicture} alt="post-pict"/>
                                         )}
                                         {video && (
                                             <iframe width="500" height="300" src={video} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title={video}/>
@@ -113,7 +113,7 @@ const NewPostForm = () => {
                             <div className="icon">
                                 {isEmpty(video) && (
                                     <>
-                                        <img src="./img/icons/picture.svg" alt="image-upload"/>
+                                        <img src="./img/icons/picture.svg" alt="upload-pict"/>
                                         <input type="file" id="file-upload" name="file" accept=".jpg, .jpeg, .png" onChange={handlePicture}/>
                                     </>
                                 )}

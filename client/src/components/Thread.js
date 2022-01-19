@@ -11,14 +11,14 @@ const Thread = () => {
     // noinspection JSUnresolvedVariable
     const posts = useSelector((state) => state.postReducer)
 
-    const loadMore = () => {
-        if(window.innerHeight  + window.pageYOffset +2 > document.scrollingElement.scrollHeight && loadPost===false){
-            setLoadPost(true)
-            setCount(count + 5)
-        }
-    }
-
     useEffect(() => {
+        const loadMore = () => {
+            if(window.innerHeight  + window.pageYOffset +2 > document.scrollingElement.scrollHeight && loadPost===false){
+                setLoadPost(true)
+                setCount(count + 5)
+            }
+        }
+
         if (loadPost){
             dispatch(getPosts(count));
             setLoadPost(false)
