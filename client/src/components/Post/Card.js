@@ -1,15 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {dateParser, isEmpty} from "../../Utils/Utils";
 import FollowHandler from "../Profil/FollowHandler";
 import LikeButton from "./LikeButton";
+import {updatePost} from "../../actions/post.actions";
+import DeleteCard from "./DeleteCard";
 
 const Card = ({post}) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isUpdated, setIsUpdated] = useState(false);
+    const [textUpdate, setTextUpdate] = useState(null);
+
     // noinspection JSUnresolvedVariable
     const usersData = useSelector((state) => state.usersReducer);
     // noinspection JSUnresolvedVariable
     const userData = useSelector((state) => state.userReducer);
+    const dispatch = useDispatch();
+
+    const updateItem = async () => {
+        if (textUpdate) {
+            await dispatch(updatePost(post._id, textUpdate))
+        }
+        setIsUpdated(false)
+    }
 
     useEffect(() => {
         !isEmpty(usersData[0]) && setIsLoading(false)
@@ -23,20 +36,14 @@ const Card = ({post}) => {
                 <>
                     <div className="card-left">
                         <img src={
-                            !isEmpty(usersData[0]) &&
-                                usersData.map((user) => {
-                                    if (user._id===post.posterId) return user.picture;
-                                }).join('')
+                            !isEmpty(usersData[0]) && usersData.filter((user) => user._id===post.posterId)[0].picture
                         } alt="poster-pic"/>
                     </div>
                     <div className={"card-right"}>
                         <div className="card-header">
                             <div className="pseudo">
                                 <h3>{
-                                    !isEmpty(usersData[0]) &&
-                                    usersData.map((user) => {
-                                        if (user._id === post.posterId) return user.pseudo;
-                                    }).join('')
+                                    !isEmpty(usersData[0]) && usersData.filter((user) => user._id===post.posterId)[0].pseudo
                                 }
                                 </h3>
                                 {post.posterId !== userData._id &&
@@ -46,9 +53,28 @@ const Card = ({post}) => {
                             </div>
                             <span>{dateParser(post.createdAt)}</span>
                         </div>
-                        <p>{post.message}</p>
+                        {!isUpdated && <p>{post.message}</p>}
+                        {isUpdated && (
+                            <div className="update-post">
+                                <textarea defaultValue={post.message} onChange={(e) => setTextUpdate(e.target.value)}/>
+                                <div className="button-container">
+                                    <button className="btn" onClick={updateItem}>
+                                        Valider modification
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                         {post.picture && <img src={post.picture} alt="card-pic" className="card-pic"/>}
-                        {post.video && <iframe width="500" height="300" src={post.video} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"/>}
+                        {post.video && <iframe width="500" height="300" src={post.video} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title={post._id}/>}
+                        {userData._id === post.posterId && (
+                            <div className="button-container">
+                                <div onClick={() => setIsUpdated(!isUpdated)}>
+                                    <img src="./img/icons/edit.svg" alt=""/>
+                                </div>
+                                <DeleteCard/>
+                            </div>
+                        )}
                         <div className="card-footer">
                             <div className="comment-icon">
                                 <img src="./img/icons/message1.svg" alt="comment"/>

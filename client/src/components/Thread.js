@@ -19,7 +19,6 @@ const Thread = () => {
     }
 
     useEffect(() => {
-        console.log(count)
         if (loadPost){
             dispatch(getPosts(count));
             setLoadPost(false)
@@ -27,7 +26,7 @@ const Thread = () => {
 
         window.addEventListener('scroll', loadMore);
         return () => window.removeEventListener('scroll', loadMore)
-    }, [loadPost, dispatch])
+    }, [loadPost, dispatch, count])
 
     return (
         <div>

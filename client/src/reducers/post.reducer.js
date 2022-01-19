@@ -25,6 +25,18 @@ export default function postReducer(state = initialState, action){
                 }
                 return post;
             });
+        case 'UPDATE_POST':
+            return state.map(post => {
+                if (post._id === action.payload.postId){
+                    return {
+                        ...post,
+                        message: action.payload.message,
+                    }
+                }
+                return post;
+            });
+        case 'DELETE_POST':
+            return state.filter(post => post._id!==action.payload.postId)
         default:
             return state;
     }
