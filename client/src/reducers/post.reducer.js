@@ -41,11 +41,11 @@ export default function postReducer(state = initialState, action){
             return state.map(post => {
                 if (post._id === action.payload.postId){
                     return {
-                        ... post,
+                        ...post,
                         comments : post.comments.map((comment) => {
                             if (comment._id === action.payload.commentId){
                                 return {
-                                    ... comment,
+                                    ...comment,
                                     text: action.payload.text,
                                 }
                             } else {
