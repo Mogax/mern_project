@@ -4,7 +4,7 @@ Ce projet est le résultat du suivi d'un tutoriel, visant à découvrir et appre
 
 Le but de ce projet est de créer un réseaux social, avec un mur de post, un profil, des trendings, des abonnements,... .
 
-## Dans ce projet j'ai acquis les compétences suivantes :
+## Dans ce projet j'ai acquis les compétences suivantes:
 
 - Création d'une API en Js
   - Gestion des erreurs
